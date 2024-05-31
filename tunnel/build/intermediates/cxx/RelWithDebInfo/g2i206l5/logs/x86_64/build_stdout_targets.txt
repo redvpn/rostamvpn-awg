@@ -1,0 +1,4 @@
+ninja: Entering directory `/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/g2i206l5/x86_64'
+[1/2] Building amneziawg-go
+make: Nothing to be done for 'default'.
+[2/2] Building elf-cleaner

@@ -1,0 +1,6 @@
+/opt/android-sdk/cmake/3.22.1/bin/ninja \
+  -C \
+  /home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/g2i206l5/armeabi-v7a \
+  libwg-go.so \
+  libwg-quick.so \
+  libwg.so

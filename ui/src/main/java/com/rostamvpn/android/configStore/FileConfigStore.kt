@@ -40,13 +40,13 @@ class FileConfigStore(private val context: Context) : ConfigStore {
 
     override fun enumerate(): Set<String> {
         return context.fileList()
-            .filter { it.endsWith(".conf") }
-            .map { it.substring(0, it.length - ".conf".length) }
+            .filter { it.endsWith(".rostamvpnconf") }
+            .map { it.substring(0, it.length - ".rostamvpnconf".length) }
             .toSet()
     }
 
     private fun fileFor(name: String): File {
-        return File(context.filesDir, "$name.conf")
+        return File(context.filesDir, "$name.rostamvpnconf")
     }
 
     @Throws(BadConfigException::class, IOException::class)

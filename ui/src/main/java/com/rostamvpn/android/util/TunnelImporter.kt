@@ -69,8 +69,8 @@ object TunnelImporter {
                             }
                             name = name.substring(name.lastIndexOf('/') + 1)
                         }
-                        if (name.lowercase().endsWith(".conf")) {
-                            name = name.substring(0, name.length - ".conf".length)
+                        if (name.lowercase().endsWith(".rostamvpnconf")) {
+                            name = name.substring(0, name.length - ".rostamvpnconf".length)
                         } else {
                             continue
                         }

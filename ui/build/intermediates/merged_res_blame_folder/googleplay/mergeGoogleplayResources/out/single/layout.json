@@ -1,0 +1,66 @@
+[
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/add_tunnels_bottom_sheet.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/add_tunnels_bottom_sheet.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/tv_activity.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/tv_activity.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/tv_tunnel_list_item.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/tv_tunnel_list_item.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/tunnel_detail_fragment.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/tunnel_detail_fragment.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/tunnel_editor_peer.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/tunnel_editor_peer.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/log_viewer_entry.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/log_viewer_entry.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/app_list_item.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/app_list_item.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/config_naming_dialog_fragment.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/config_naming_dialog_fragment.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/tv_file_list_item.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/tv_file_list_item.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/tunnel_list_fragment.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/tunnel_list_fragment.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/app_list_dialog_fragment.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/app_list_dialog_fragment.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/tunnel_editor_fragment.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/tunnel_editor_fragment.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/log_viewer_activity.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/log_viewer_activity.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/tunnel_detail_peer.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/tunnel_detail_peer.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/tunnel_list_item.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/tunnel_list_item.xml"
+    },
+    {
+        "merged": "com.rostamvpn.android.ui-mergeGoogleplayResources-4:/layout/main_activity.xml",
+        "source": "com.rostamvpn.android.ui-main-8:/layout/main_activity.xml"
+    }
+]
