@@ -20,28 +20,29 @@ import com.rostamvpn.android.backend.Tunnel
 import com.rostamvpn.android.util.ErrorMessages
 import kotlinx.coroutines.launch
 
+
 class TunnelToggleActivity : AppCompatActivity() {
     private val permissionActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { toggleTunnelWithPermissionsResult() }
 
-    private fun toggleTunnelWithPermissionsResult() {
-        val tunnel = Application.getTunnelManager().lastUsedTunnel ?: return
-        lifecycleScope.launch {
-            try {
-                tunnel.setStateAsync(Tunnel.State.TOGGLE)
-            } catch (e: Throwable) {
-                TileService.requestListeningState(this@TunnelToggleActivity, ComponentName(this@TunnelToggleActivity, QuickTileService::class.java))
-                val error = ErrorMessages[e]
-                val message = getString(R.string.toggle_error, error)
-                Log.e(TAG, message, e)
-                Toast.makeText(this@TunnelToggleActivity, message, Toast.LENGTH_LONG).show()
-                finishAffinity()
-                return@launch
-            }
+private fun toggleTunnelWithPermissionsResult() {
+    val tunnel = Application.getTunnelManager().lastUsedTunnel ?: return
+    lifecycleScope.launch {
+        try {
+            val newState = tunnel.setStateAsync(Tunnel.State.TOGGLE)
+        } catch (e: Throwable) {
             TileService.requestListeningState(this@TunnelToggleActivity, ComponentName(this@TunnelToggleActivity, QuickTileService::class.java))
+            val error = ErrorMessages[e]
+            val message = getString(R.string.toggle_error, error)
+            Log.e(TAG, message, e)
+            Toast.makeText(this@TunnelToggleActivity, message, Toast.LENGTH_LONG).show()
             finishAffinity()
+            return@launch
         }
+        TileService.requestListeningState(this@TunnelToggleActivity, ComponentName(this@TunnelToggleActivity, QuickTileService::class.java))
+        finishAffinity()
     }
+}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +59,6 @@ class TunnelToggleActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "AmneziaWG/TunnelToggleActivity"
+        const val TAG = "AmneziaWG/TunnelToggleActivity"
     }
 }

@@ -1,0 +1,1 @@
+/home/architect/rostam-vpn-awg/tunnel/build/intermediates/cxx/RelWithDebInfo/4k6p5b72/obj/x86

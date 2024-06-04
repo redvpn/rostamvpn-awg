@@ -1,0 +1,23 @@
+# ninja log v5
+111	386	0	CMakeFiles/elf-cleaner	b47431ad13625bed
+111	386	0	/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1x103x59/armeabi-v7a/CMakeFiles/elf-cleaner	b47431ad13625bed
+441	595	1717345529163009255	CMakeFiles/libwg-quick.so.dir/ndk-compat/compat.c.o	d00770b448cc1ab6
+440	746	1717345529239012489	CMakeFiles/libwg-quick.so.dir/amneziawg-tools/src/wg-quick/android.c.o	a38af0eb65e83a0
+441	2353	1717345529451021509	CMakeFiles/libwg.so.dir/amneziawg-tools/src/config.c.o	db70e3e5298a418a
+441	3112	1717345529431020659	CMakeFiles/libwg.so.dir/amneziawg-tools/src/curve25519.c.o	c782bb3d567585b2
+441	3266	1717345529515024232	CMakeFiles/libwg.so.dir/amneziawg-tools/src/encoding.c.o	7b705325a2b5090a
+441	3427	1717345529419020147	CMakeFiles/libwg.so.dir/amneziawg-tools/src/genkey.c.o	acd656e22494889b
+441	3786	1717345529511024062	CMakeFiles/libwg.so.dir/amneziawg-tools/src/ipc.c.o	e10562a21fc6ddb1
+442	4152	1717345529371018105	CMakeFiles/libwg.so.dir/amneziawg-tools/src/pubkey.c.o	b4568c9cdcbe5884
+442	4279	1717345529359017595	CMakeFiles/libwg.so.dir/amneziawg-tools/src/set.c.o	3be87663a90684a1
+442	4376	1717345529471022360	CMakeFiles/libwg.so.dir/amneziawg-tools/src/setconf.c.o	e89995c544a4967b
+443	4475	1717345529487023041	CMakeFiles/libwg.so.dir/amneziawg-tools/src/show.c.o	fe52ce90acb84392
+712	4623	1717345529623028828	CMakeFiles/libwg.so.dir/amneziawg-tools/src/showconf.c.o	d534d009842b692
+3086	4716	1717345531835122995	CMakeFiles/libwg.so.dir/amneziawg-tools/src/terminal.c.o	744e741efb93ccd5
+3240	4806	1717345532027131171	CMakeFiles/libwg.so.dir/amneziawg-tools/src/wg.c.o	c98fd1ee8990bd37
+3362	4926	1717345532095134068	CMakeFiles/libwg.so.dir/ndk-compat/compat.c.o	dc8d128ab04bc749
+2329	5000	1717345531463107152	/Volumes/rostam-vpn-awg/tunnel/build/intermediates/cxx/Debug/1x103x59/obj/armeabi-v7a/libwg-quick.so	804fcdaa03b0454c
+4999	5429	1717345534035216741	/Volumes/rostam-vpn-awg/tunnel/build/intermediates/cxx/Debug/1x103x59/obj/armeabi-v7a/libwg.so	5cfd854e90f6866
+110	15730	0	CMakeFiles/libwg-go.so	6a449582a109e1dc
+110	15730	0	/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1x103x59/armeabi-v7a/CMakeFiles/libwg-go.so	6a449582a109e1dc
+3	439	0	clean	234eb8255a12c367

@@ -1,0 +1,87 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "AmneziaWG",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "elf-cleaner::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-elf-cleaner-Debug-0613fcacb7e8bbd75e30.json",
+					"name" : "elf-cleaner",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "libwg-go.so::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-libwg-go.so-Debug-5407cc8c975da2e2c209.json",
+					"name" : "libwg-go.so",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "libwg-quick.so::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-libwg-quick.so-Debug-53a441b3ddbbf66add13.json",
+					"name" : "libwg-quick.so",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "libwg.so::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-libwg.so-Debug-b7187c0540d1bc32b499.json",
+					"name" : "libwg.so",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1t5e3239/arm64-v8a",
+		"source" : "/Volumes/rostam-vpn-awg/tunnel/tools"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

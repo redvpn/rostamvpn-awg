@@ -6,7 +6,9 @@
     <data>
 
         <import type="com.rostamvpn.android.model.ObservableTunnel" />
-
+        <import type="com.rostamvpn.android.backend.Tunnel.State" />
+        <import type="com.rostamvpn.android.fragment.TunnelListFragment" />
+        <import type="android.view.View" />
         <variable
             name="fragment"
             type="com.rostamvpn.android.fragment.TunnelListFragment" />
@@ -24,38 +26,40 @@
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorSurface"
+        android:background="@mipmap/globe_dot_pattern"
         android:clipChildren="false">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tunnel_list"
             android:layout_width="match_parent"
-            android:layout_height="132dp"
+            android:layout_height="match_parent"
             android:clipToPadding="false"
             android:nextFocusDown="@id/create_fab"
             android:nextFocusForward="@id/create_fab"
             android:paddingBottom="@{@dimen/design_fab_size_normal * 1.1f}"
-            android:visibility="@{tunnels.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}"
             app:configurationHandler="@{rowConfigurationHandler}"
             app:items="@{tunnels}"
             app:layout="@{@layout/tunnel_list_item}"
-            tools:itemCount="1"
+            tools:itemCount="2"
             tools:listitem="@layout/tunnel_list_item" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible"
+            tools:visibility="visible">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/logo_placeholder"
+                android:id="@+id/logo_placeholder_active"
                 android:layout_width="240dp"
                 android:layout_height="240dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                android:alpha="0.3333333"
-                android:src="@drawable/rostam_logo_default" />
+                android:alpha="1.0"
+                android:visibility="visible"
+                app:srcCompat="@drawable/rostam_logo_active" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -72,9 +76,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
+            android:layout_margin="@android:dimen/app_icon_size"
+            android:background="#FFC107"
             android:nextFocusUp="@id/tunnel_list"
-            app:srcCompat="@drawable/ic_action_add_white" />
+            android:soundEffectsEnabled="false"
+            app:backgroundTint="#FFC107"
+            app:srcCompat="@android:drawable/ic_input_add" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

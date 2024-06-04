@@ -1,0 +1,6 @@
+/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/4k6p5b72/x86_64/CMakeFiles/libwg-quick.so.dir
+/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/4k6p5b72/x86_64/CMakeFiles/libwg.so.dir
+/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/4k6p5b72/x86_64/CMakeFiles/libwg-go.so.dir
+/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/4k6p5b72/x86_64/CMakeFiles/elf-cleaner.dir
+/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/4k6p5b72/x86_64/CMakeFiles/edit_cache.dir
+/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/4k6p5b72/x86_64/CMakeFiles/rebuild_cache.dir

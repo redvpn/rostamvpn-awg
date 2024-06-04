@@ -1,0 +1,24 @@
+# ninja log v5
+427	521	1717463600411503888	CMakeFiles/libwg.so.dir/amneziawg-tools/src/showconf.c.o	38387cabf81df6eb
+425	549	1717463600439505362	CMakeFiles/libwg.so.dir/amneziawg-tools/src/encoding.c.o	2ba9b889cda35521
+1	369	0	/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/4k6p5b72/arm64-v8a/CMakeFiles/elf-cleaner	24847f5aaa19e0d7
+426	492	1717463600383502413	CMakeFiles/libwg.so.dir/amneziawg-tools/src/set.c.o	4378f70bcd7623eb
+426	549	1717463600439505362	CMakeFiles/libwg.so.dir/amneziawg-tools/src/setconf.c.o	a71d7743891091f2
+1	5	0	CMakeFiles/libwg-go.so	a34c65a9d00356e7
+1	369	0	CMakeFiles/elf-cleaner	24847f5aaa19e0d7
+427	514	1717463600403503467	CMakeFiles/libwg.so.dir/amneziawg-tools/src/terminal.c.o	d87092b842f8b5f4
+426	514	1717463600403503467	CMakeFiles/libwg.so.dir/amneziawg-tools/src/genkey.c.o	fa7824c849dbe5b4
+426	482	1717463600375501992	CMakeFiles/libwg.so.dir/amneziawg-tools/src/pubkey.c.o	6a3d2d479dea02b7
+425	452	1717463600343500308	CMakeFiles/libwg.so.dir/ndk-compat/compat.c.o	18c7d616763852f4
+1	5	0	/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/4k6p5b72/arm64-v8a/CMakeFiles/libwg-go.so	a34c65a9d00356e7
+3622	3661	1717463603547669010	/home/architect/rostam-vpn-awg/tunnel/build/intermediates/cxx/RelWithDebInfo/4k6p5b72/obj/arm64-v8a/libwg.so	7f0823ff3c7229b6
+428	486	1717463600379502203	CMakeFiles/libwg.so.dir/amneziawg-tools/src/wg.c.o	ec1235e7bdf49acc
+424	453	1717463600343500308	CMakeFiles/libwg-quick.so.dir/ndk-compat/compat.c.o	57ca0a8fe49c168c
+0	2	0	clean	2d2f43cf2094d251
+426	1045	1717463600935531479	CMakeFiles/libwg.so.dir/amneziawg-tools/src/ipc.c.o	9ff5910094841516
+427	650	1717463600543510838	CMakeFiles/libwg.so.dir/amneziawg-tools/src/show.c.o	ac72d71e305ff0e9
+425	3622	1717463603511667115	CMakeFiles/libwg.so.dir/amneziawg-tools/src/curve25519.c.o	3d07c140c8407b19
+425	699	1717463600591513366	CMakeFiles/libwg.so.dir/amneziawg-tools/src/config.c.o	2c56b4a8ac83fd69
+424	791	1717463600683518210	CMakeFiles/libwg-quick.so.dir/amneziawg-tools/src/wg-quick/android.c.o	77667e776b09fe3e
+791	822	1717463600715519895	/home/architect/rostam-vpn-awg/tunnel/build/intermediates/cxx/RelWithDebInfo/4k6p5b72/obj/arm64-v8a/libwg-quick.so	552f750c3b7b8861
+0	3	0	clean	2d2f43cf2094d251

@@ -30,7 +30,7 @@
         android:id="@+id/tunnel_list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_item_background"
+        android:background="@color/zxing_possible_result_points"
         android:descendantFocusability="beforeDescendants"
         android:focusable="true"
         android:nextFocusRight="@+id/tunnel_switch"
@@ -47,6 +47,7 @@
             android:maxLines="1"
             android:text="@{key}"
             android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textStyle="bold"
             tools:text="@sample/interface_names.json/names/names/name" />
 
         <com.rostamvpn.android.widget.ToggleSwitch

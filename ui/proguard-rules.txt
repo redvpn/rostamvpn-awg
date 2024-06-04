@@ -1,0 +1,48 @@
+-allowaccessmodification
+-dontusemixedcaseclassnames
+-dontobfuscate
+-verbose
+
+-keepattributes *Annotation*
+
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keepclassmembers class * implements android.os.Parcelable {
+  public static final ** CREATOR;
+}
+
+-keep class androidx.annotation.Keep
+
+-keep @androidx.annotation.Keep class * {*;}
+
+-keepclasseswithmembers class * {
+    @androidx.annotation.Keep <methods>;
+}
+
+-keepclasseswithmembers class * {
+    @androidx.annotation.Keep <fields>;
+}
+
+-keepclasseswithmembers class * {
+    @androidx.annotation.Keep <init>(...);
+}
+
+# Keep the JsonObject class and its members
+-keep class kotlinx.serialization.json.JsonObject { *; }
+
+# Keep the serialization annotations
+-keep class kotlinx.serialization.Serializable { *; }
+-keep @kotlinx.serialization.Serializable class * { *; }
+
+# Keep the KotlinxSerializer and its methods
+-keep class io.ktor.client.features.json.serializer.KotlinxSerializer { *; }
+-keep class com.rostamvpn.android.fragment.AddTunnelsSheet {*;}
+-keep class kotlinx.serialization.** { *; }
+-keep class com.rostamvpn.android.fragment.* { *; }

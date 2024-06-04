@@ -88,8 +88,6 @@
     <string name="config_file_exists_error">Configuration file “%s” already exists</string>
     <string name="config_not_found_error">Configuration file “%s” not found</string>
     <string name="config_rename_error">Cannot rename configuration file “%s”</string>
-    <string name="config_save_error">Cannot save configuration for “%1$s”: %2$s</string>
-    <string name="config_save_success">Successfully saved configuration for “%s”</string>
     <string name="create_activity_title">Create RostamVPN Tunnel</string>
     <string name="create_bin_dir_error">Cannot create local binary directory</string>
     <string name="create_downloads_file_error">Cannot create file in downloads directory</string>
@@ -108,7 +106,6 @@
     <string name="tv_select_a_storage_drive">Select a storage drive</string>
     <string name="tv_no_file_picker">Please install a file management utility to browse files</string>
     <string name="tv_add_tunnel_get_started">Add a tunnel to get started</string>
-    <string name="tunnel_list_placeholder">Your Gateway to Secure, Fast &amp; Open Internet.</string>
     <string name="disable_config_export_title">Disable config exporting</string>
     <string name="disable_config_export_description">Disabling config exporting makes private keys less accessible</string>
     <string name="dns_servers">DNS servers</string>
@@ -129,7 +126,6 @@
     <string name="hint_optional_discouraged">(optional, not recommended)</string>
     <string name="hint_random">(random)</string>
     <string name="illegal_filename_error">Illegal file name “%s”</string>
-    <string name="import_error">Unable to import tunnel: %s</string>
     <string name="import_from_qr_code">Import Tunnel from QR Code</string>
     <string name="import_success">Imported “%s”</string>
     <string name="interface_title">Interface</string>
@@ -231,6 +227,7 @@
     <string name="tunnel_create_success">Successfully created tunnel “%s”</string>
     <string name="tunnel_error_already_exists">Tunnel “%s” already exists</string>
     <string name="tunnel_error_invalid_name">Invalid name</string>
+    <string name="tunnel_list_placeholder">Secure &amp; Fast access to open Internet.</string>
     <string name="tunnel_name">Tunnel Name</string>
     <string name="tunnel_on_error">Unable to turn tunnel on (wgTurnOn returned %d)</string>
     <string name="tunnel_dns_failure">Unable to resolve DNS hostname: “%s”</string>
@@ -253,4 +250,62 @@
     <string name="biometric_prompt_private_key_title">Authenticate to view private key</string>
     <string name="biometric_auth_error">Authentication failure</string>
     <string name="biometric_auth_error_reason">Authentication failure: %s</string>
+    <string name="create_from_hardcoded" type="id">New Profile</string>
+    <string name="tap_to_connect">برای اتصال به شبکه‌ٔ وی‌پی‌ان\nروی تصویر رستم تپ کنید.</string>
+    <string name="tap_to_disconnect">اکنون به شبکه‌ٔ وی‌پی‌ان متصل هستید و می‌توانید به محتوای فیلترشده دسترسی داشته باشید. برای قطع اتصال روی تصویر رستم تپ کنید.</string>
+    <string name="connecting">در حال اتصال به شبکه‌ٔ وی‌پی‌ان هستید.\nلطفاً صبر کنید.</string>
+    <string name="vpn_label">وی‌پی‌ان:</string>
+    <string name="vpn_state_off">خاموش</string>
+    <string name="vpn_state_on">روشن</string>
+    <string name="vpn_state_connecting">در حال اتصال</string>
+    <string name="no_internet_connection">در حال حاضر به اینترنت متصل نیستید.</string>
+    <string name="vpn_connection_try_again">ارتباط با سرور وی‌پی‌ان برقرار نشد. لطفاً بعد از چند لحظه دوباره امتحان کنید.</string>
+    <string name="vpn_connection_failure">ارتباط با سرور وی‌پی‌ان برقرار نشد. برای گرفتن پروفایل وی‌پی‌ان جدید روی لینک زیر تپ کنید و ایمیل از پیش پر شده را بفرستید.</string>
+    <string name="config_request_email" formatted="false">&lt;a href="mailto:begir@rostam.app?subject=Android%20Profile&amp;body=Token%3APUBKEY">درخواست پروفایل جدید&lt;/a></string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="config_save_error">Cannot save configuration for “%1$s”: %2$s</string>
+    <string name="config_save_success">Successfully saved configuration for “%s”</string>
+    <string name="config_update_error">اشکال در به‌روزرسانی پروفایل وی‌پی‌ان!</string>
+    <string name="config_update_success">پروفایل وی‌پی‌ان به‌روز شد. برای اتصال به شبکه‌ٔ وی‌پی‌ان روی تصویر رستم تپ کنید.</string>
+    <string name="bad_config_file_error">فایل پروفایل وی‌پی‌ان معتبر نیست.</string>
+    <string name="import_error">Unable to import tunnel: %s</string>
+    <string name="tunnel_import_error">اشکال در بارگیری پروفایل وی‌پی‌ان!</string>
+    <string name="about_rostam_title">درباره‌ٔ وی‌پی‌ان رستم</string>
+    <string name="privacy_policy_title">سیاست حفظ حریم خصوصی</string>
+    <string name="about_rostam_text">وی‌پی‌ان رستم با استفاده از جدیدترین فناوری‌های رمزگذاری مانند ChaCha20 ،Poly1305 و BLAKE2 و همچنین با بهره‌برداری از جدیدترین فناوری دور زدن فیلترینگ به شما کمک می‌کند در اسرع وقت به اینترنت آزاد دسترسی پیدا کنید. تیم فنی رستم که از کنشگرهای چرخش آزاد اطلاعات و کارشناس‌های شبکه و امنیت سایبری در خارج از ایران تشکیل شده، به صورت فعال تلاش دارد بهترین و امن‌ترین راه‌های دور زدن فیلترینگ را به کاربرهای خود ارائه دهد و با تمام توان با سانسور اینترنتی مقابله کند. اگر شما بازخوردی در مورد وی‌پی‌ان رستم دارید، می‌توانید با ایمیل زیر تماس بگیرید:</string>
+    <string name="feedback_email">&lt;a href="mailto:nazar@rostam.app">nazar@rostam.app&lt;/a></string>
+    <string name="please_wait">لطفاً چند لحظه صبر کنید...</string>
+    <!-- Onboarding -->
+    <string name="onboarding_skip">شروع</string>
+    <string name="onboarding_fast_servers">سرورهای پرسرعت</string>
+    <string name="onboarding_bypass_censorship">دور زدن سانسور</string>
+    <string name="onboarding_encrypt_online_communication">رمزگذاری ارتباطات آنلاین</string>
+    <string name="onboarding_increase_digital_safety">افزایش امنیت دیجیتال</string>
+    <string name="open_source_libraries_title">کتابخانه‌های متن‌باز</string>
+
+    <!-- Digital safety Tips -->
+    <string name="digital_safety_tip_title">آیا می‌دانید؟</string>
+    <string name="digital_safety_tip_read_more">&lt;u>ادامهٔ مطلب&lt;/u></string>
+
+    <!-- Server location -->
+    <string name="servers">سرورها</string>
+    <string name="turn_vpn_off_to_choose_server_location">برای تغییر سرور، ابتدا رستم را خاموش کنید</string>
+    <string name="latency">بهترین سرور</string>
+    <string name="au">استرالیا</string>
+    <string name="ca">کانادا</string>
+    <string name="de">آلمان</string>
+    <string name="gb">انگلستان</string>
+    <string name="nl">هلند</string>
+    <string name="sg">سنگاپور</string>
+    <string name="us">آمریکا</string>
+    <string name="fr">فرانسه</string>
+    <string name="pl">لهستان</string>
+    <string name="is">ایسلند</string>
+
+    <!-- Social media -->
+    <string name="follow_rostam_vpn">وی‌پی‌ان رستم را فالو کنید</string>
+    <string name="twitter_url">https://twitter.com/RostamVpn</string>
+    <string name="instagram_url">https://www.instagram.com/rostamvpn/</string>
+
 </resources>

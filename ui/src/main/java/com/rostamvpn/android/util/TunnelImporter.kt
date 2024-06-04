@@ -12,13 +12,15 @@ import android.util.Log
 import androidx.fragment.app.FragmentManager
 import com.rostamvpn.android.Application
 import com.rostamvpn.android.R
+import com.rostamvpn.android.config.Config
 import com.rostamvpn.android.fragment.ConfigNamingDialogFragment
 import com.rostamvpn.android.model.ObservableTunnel
-import com.rostamvpn.android.config.Config
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
@@ -117,6 +119,24 @@ object TunnelImporter {
 
             // Config text is valid, now create the tunnel…
             ConfigNamingDialogFragment.newInstance(configText).show(parentFragmentManager, null)
+        } catch (e: Throwable) {
+            onTunnelImportFinished(emptyList(), listOf<Throwable>(e), messageCallback)
+        }
+    }
+    fun importTunnelRostam(scope: CoroutineScope, parentFragmentManager: FragmentManager, tunnelName: String, configText: String, messageCallback: (CharSequence) -> Unit) {
+        try {
+            // Ensure the config text is parseable before proceeding…
+            val config = Config.parse(ByteArrayInputStream(configText.toByteArray(StandardCharsets.UTF_8)))
+
+            // Config text is valid, now create the tunnel…
+            scope.launch {
+                try {
+                    Application.getTunnelManager().create(tunnelName, config)
+                    messageCallback("Tunnel $tunnelName created successfully.")
+                } catch (e: Throwable) {
+                    onTunnelImportFinished(emptyList(), listOf<Throwable>(e), messageCallback)
+                }
+            }
         } catch (e: Throwable) {
             onTunnelImportFinished(emptyList(), listOf<Throwable>(e), messageCallback)
         }

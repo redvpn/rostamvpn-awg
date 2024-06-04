@@ -7,6 +7,27 @@
     android:fitsSystemWindows="true"
     tools:context=".activity.MainActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="0dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/toolbar_logo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:src="@drawable/rostam_vpn_drawer" />
+    </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/detail_container"
         android:name="com.rostamvpn.android.fragment.TunnelListFragment"

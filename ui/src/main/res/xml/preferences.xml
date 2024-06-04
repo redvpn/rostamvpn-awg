@@ -26,7 +26,7 @@
         android:summaryOn="@string/dark_theme_summary_on"
         android:title="@string/dark_theme_title" />
     <CheckBoxPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="multiple_tunnels"
         android:singleLineTitle="false"
         android:summaryOff="@string/multiple_tunnels_summary_off"

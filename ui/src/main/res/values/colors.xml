@@ -60,4 +60,23 @@
     <color name="md_theme_dark_surfaceTint">#ADC7FF</color>
     <color name="md_theme_dark_outlineVariant">#44474F</color>
     <color name="md_theme_dark_scrim">#000000</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#343434</color>
+    <color name="black">#343434</color>
+    <color name="black_drawer">#272727</color>
+    <color name="white">#ffffff</color>
+    <color name="jade_green">#26ae46</color>
+    <color name="brownish_orange">#df5d1b</color>
+    <color name="charcoal_grey">#515253</color>
+    <color name="camel">#c8a54a</color>
+    <color name="cameo_silk">#e2dbcc</color>
+    <color name="brown_grey">#858585</color>
+    <color name="light_grayish_orange">#f3ead4</color>
+    <color name="snackbar_error">#b14343</color>
+    <color name="snackbar_success">#5b9b5a</color>
+    <color name="snackbar_info">#2b78af</color>
+    <color name="light_gray">#d4d4d4</color>
+    <color name="light_azure">#e9f0f1</color>
+    <color name="pale">#f3ead4</color>
+    <color name="brown_rum">#ba9b4b</color>
 </resources>

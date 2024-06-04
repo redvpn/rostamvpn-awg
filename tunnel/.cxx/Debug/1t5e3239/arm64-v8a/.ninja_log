@@ -1,0 +1,20 @@
+# ninja log v5
+88	486	0	CMakeFiles/elf-cleaner	52eac3c2b66badd4
+88	486	0	/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1t5e3239/arm64-v8a/CMakeFiles/elf-cleaner	52eac3c2b66badd4
+532	704	1717371618839144645	CMakeFiles/libwg-quick.so.dir/ndk-compat/compat.c.o	32cb0a8889ef850f
+532	857	1717371618959150944	CMakeFiles/libwg-quick.so.dir/amneziawg-tools/src/wg-quick/android.c.o	e0b29ffe5f527483
+532	2923	1717371619359171940	CMakeFiles/libwg.so.dir/amneziawg-tools/src/config.c.o	8874e3e6fe7538ec
+532	3749	1717371619667188107	CMakeFiles/libwg.so.dir/amneziawg-tools/src/curve25519.c.o	6c78cdb9af3f9bc9
+533	3883	1717371619267167111	CMakeFiles/libwg.so.dir/amneziawg-tools/src/encoding.c.o	791be7d198744e2c
+533	4164	1717371619367172360	CMakeFiles/libwg.so.dir/amneziawg-tools/src/genkey.c.o	660f6232cbcf016a
+533	5097	1717371619403174249	CMakeFiles/libwg.so.dir/amneziawg-tools/src/ipc.c.o	e385092d26977324
+533	5604	1717371619359171940	CMakeFiles/libwg.so.dir/amneziawg-tools/src/pubkey.c.o	1325b9d02b78a4f3
+533	5706	1717371619295168581	CMakeFiles/libwg.so.dir/amneziawg-tools/src/set.c.o	c9b6c5733736feb8
+534	5803	1717371619351171520	CMakeFiles/libwg.so.dir/amneziawg-tools/src/setconf.c.o	c414a622793c7450
+534	5896	1717371619383173200	CMakeFiles/libwg.so.dir/amneziawg-tools/src/show.c.o	32be255f8c61bfda
+822	6047	1717371619303169000	CMakeFiles/libwg.so.dir/amneziawg-tools/src/showconf.c.o	b1c6d606ae30b483
+3727	6132	1717371622023311774	CMakeFiles/libwg.so.dir/amneziawg-tools/src/terminal.c.o	589c2553fc2fa146
+3851	6217	1717371622343328571	CMakeFiles/libwg.so.dir/amneziawg-tools/src/wg.c.o	2247d176280f1d11
+4058	6312	1717371622383330672	CMakeFiles/libwg.so.dir/ndk-compat/compat.c.o	6a8be600bb8fd79d
+2898	6357	1717371621655292458	/Volumes/rostam-vpn-awg/tunnel/build/intermediates/cxx/Debug/1t5e3239/obj/arm64-v8a/libwg-quick.so	d9d77d5dc1ebcc0
+6357	6977	1717371625143475546	/Volumes/rostam-vpn-awg/tunnel/build/intermediates/cxx/Debug/1t5e3239/obj/arm64-v8a/libwg.so	cc8aeb18ed74a9f7

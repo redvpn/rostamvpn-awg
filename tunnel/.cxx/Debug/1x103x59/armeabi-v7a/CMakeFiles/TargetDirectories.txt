@@ -1,0 +1,6 @@
+/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1x103x59/armeabi-v7a/CMakeFiles/libwg-quick.so.dir
+/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1x103x59/armeabi-v7a/CMakeFiles/libwg.so.dir
+/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1x103x59/armeabi-v7a/CMakeFiles/libwg-go.so.dir
+/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1x103x59/armeabi-v7a/CMakeFiles/elf-cleaner.dir
+/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1x103x59/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1x103x59/armeabi-v7a/CMakeFiles/rebuild_cache.dir

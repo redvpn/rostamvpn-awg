@@ -1,0 +1,4 @@
+/home/architect/rostam-vpn-awg/tunnel/.cxx/Debug/2y3q705j/armeabi-v7a/CMakeFiles/elf-cleaner
+/home/architect/rostam-vpn-awg/tunnel/.cxx/Debug/2y3q705j/armeabi-v7a/CMakeFiles/elf-cleaner.rule
+/home/architect/rostam-vpn-awg/tunnel/.cxx/Debug/2y3q705j/armeabi-v7a/CMakeFiles/libwg-go.so
+/home/architect/rostam-vpn-awg/tunnel/.cxx/Debug/2y3q705j/armeabi-v7a/CMakeFiles/libwg-go.so.rule

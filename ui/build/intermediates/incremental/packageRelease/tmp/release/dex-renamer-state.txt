@@ -1,7 +1,0 @@
-#Thu May 30 11:52:09 PDT 2024
-base.1=/home/architect/rostam-vpn-awg/ui/build/intermediates/desugar_lib_dex/release/l8DexDesugarLibRelease/classes1000.dex
-path.1=classes1000.dex
-base.0=/home/architect/rostam-vpn-awg/ui/build/intermediates/dex/release/minifyReleaseWithR8/classes.dex
-renamed.1=classes2.dex
-renamed.0=classes.dex
-path.0=classes.dex

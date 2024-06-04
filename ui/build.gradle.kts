@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    kotlin("plugin.serialization") version "1.5.21" // Add the Kotlin serialization plugin
 }
 
 android {
@@ -30,11 +31,23 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
+
+    signingConfigs {
+        create("signed_release") {
+            storeFile = file(project.property("MYAPP_RELEASE_STORE_FILE") as String)
+            keyAlias = project.property("MYAPP_RELEASE_KEY_ALIAS") as String
+            storePassword = project.property("MYAPP_RELEASE_STORE_PASSWORD") as String
+            keyPassword = project.property("MYAPP_RELEASE_KEY_PASSWORD") as String
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles("proguard-android-optimize.txt")
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.txt"
+            )
             packaging {
                 resources {
                     excludes += "DebugProbesKt.bin"
@@ -42,14 +55,17 @@ android {
                     excludes += "META-INF/*.version"
                 }
             }
+            signingConfig = signingConfigs.getByName("signed_release")
         }
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
+            signingConfig = signingConfigs.getByName("signed_release")
         }
         create("googleplay") {
             initWith(getByName("release"))
             matchingFallbacks += "release"
+            signingConfig = signingConfigs.getByName("signed_release")
         }
     }
     androidResources {
@@ -79,6 +95,14 @@ dependencies {
     implementation(libs.zxing.android.embedded)
     implementation(libs.kotlinx.coroutines.android)
     coreLibraryDesugaring(libs.desugarJdkLibs)
+    implementation("io.ktor:ktor-client-core:1.6.7")
+    implementation("io.ktor:ktor-client-json:1.6.7")
+    implementation("io.ktor:ktor-client-serialization:1.6.7")
+    implementation("io.ktor:ktor-client-android:1.6.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2") // Add this line
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -88,4 +112,14 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+}
+
+tasks.register("printProguardFiles") {
+    doLast {
+        println("ProGuard files: ${android.buildTypes.getByName("release").proguardFiles}")
+    }
+}
+
+tasks.matching { it.name == "assembleRelease" }.configureEach {
+    dependsOn("printProguardFiles")
 }

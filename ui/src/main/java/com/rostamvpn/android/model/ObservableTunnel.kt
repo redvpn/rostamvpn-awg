@@ -10,9 +10,9 @@ import androidx.databinding.Bindable
 import com.rostamvpn.android.BR
 import com.rostamvpn.android.backend.Statistics
 import com.rostamvpn.android.backend.Tunnel
+import com.rostamvpn.android.config.Config
 import com.rostamvpn.android.databinding.Keyed
 import com.rostamvpn.android.util.applicationScope
-import com.rostamvpn.android.config.Config
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

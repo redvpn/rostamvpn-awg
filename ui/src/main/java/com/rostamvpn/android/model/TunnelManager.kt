@@ -19,12 +19,12 @@ import com.rostamvpn.android.BR
 import com.rostamvpn.android.R
 import com.rostamvpn.android.backend.Statistics
 import com.rostamvpn.android.backend.Tunnel
+import com.rostamvpn.android.config.Config
 import com.rostamvpn.android.configStore.ConfigStore
 import com.rostamvpn.android.databinding.ObservableSortedKeyedArrayList
 import com.rostamvpn.android.util.ErrorMessages
 import com.rostamvpn.android.util.UserKnobs
 import com.rostamvpn.android.util.applicationScope
-import com.rostamvpn.android.config.Config
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

@@ -5,7 +5,7 @@
 
 <restrictions xmlns:android="http://schemas.android.com/apk/res/android">
     <restriction
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:description="@string/disable_config_export_description"
         android:key="disable_config_export"
         android:restrictionType="bool"

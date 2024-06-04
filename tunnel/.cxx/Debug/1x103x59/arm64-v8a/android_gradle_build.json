@@ -1,0 +1,55 @@
+{
+  "buildFiles": [
+    "/Volumes/rostam-vpn-awg/tunnel/tools/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/architect/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1x103x59/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/architect/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1x103x59/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "elf-cleaner::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "elf-cleaner"
+    },
+    "libwg-go.so::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "libwg-go.so"
+    },
+    "libwg-quick.so::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "libwg-quick.so",
+      "output": "/Volumes/rostam-vpn-awg/tunnel/build/intermediates/cxx/Debug/1x103x59/obj/arm64-v8a/libwg-quick.so",
+      "runtimeFiles": []
+    },
+    "libwg.so::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "libwg.so",
+      "output": "/Volumes/rostam-vpn-awg/tunnel/build/intermediates/cxx/Debug/1x103x59/obj/arm64-v8a/libwg.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/Users/architect/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/Users/architect/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": []
+}

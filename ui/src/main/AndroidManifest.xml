@@ -98,6 +98,14 @@
             </intent-filter>
         </activity>
 
+<activity android:name=".FullScreenWebViewActivity"
+    android:exported="true"
+    android:parentActivityName=".activity.MainActivity">
+        <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+        </intent-filter>
+</activity>
+
         <provider
             android:name=".activity.LogViewerActivity$ExportedLogContentProvider"
             android:authorities="${applicationId}.exported-log"

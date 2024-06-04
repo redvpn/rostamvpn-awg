@@ -29,6 +29,7 @@ import com.journeyapps.barcodescanner.ScanOptions
 import com.rostamvpn.android.Application
 import com.rostamvpn.android.R
 import com.rostamvpn.android.activity.TunnelCreatorActivity
+import com.rostamvpn.android.backend.Tunnel
 import com.rostamvpn.android.databinding.ObservableKeyedRecyclerViewAdapter.RowConfigurationHandler
 import com.rostamvpn.android.databinding.TunnelListFragmentBinding
 import com.rostamvpn.android.databinding.TunnelListItemBinding
@@ -79,6 +80,11 @@ class TunnelListFragment : BaseFragment() {
             activity.lifecycleScope.launch { TunnelImporter.importTunnel(parentFragmentManager, qrCode) { showSnackbar(it) } }
         }
     }
+
+    public fun getTunnelState(tunnel: ObservableTunnel): Tunnel.State {
+        return tunnel.state
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -329,6 +335,7 @@ class TunnelListFragment : BaseFragment() {
             })
             view.startAnimation(animation)
         }
+
     }
 
     companion object {
