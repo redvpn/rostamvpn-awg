@@ -423,6 +423,6 @@ class TvMainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "AmneziaWG/TvMainActivity"
+        private const val TAG = "RostamVPN/TvMainActivity"
     }
 }

@@ -51,6 +51,7 @@ class QuickTileService : TileService() {
         return ret
     }
 
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onClick() {
         when (val tunnel = tunnel) {
             null -> {
@@ -60,7 +61,8 @@ class QuickTileService : TileService() {
                     startActivityAndCollapse(PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE))
                 } else {
                     @Suppress("DEPRECATION")
-                    startActivityAndCollapse(intent)
+                    val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                    startActivityAndCollapse(pendingIntent)
                 }
             }
             else -> {
@@ -148,7 +150,7 @@ class QuickTileService : TileService() {
             null -> {
                 tile.label = getString(R.string.app_name)
                 tile.state = Tile.STATE_INACTIVE
-                tile.icon = iconOff
+                tile.icon = iconOn
             }
             else -> {
                 tile.label = tunnel.name
@@ -180,7 +182,7 @@ class QuickTileService : TileService() {
     }
 
     companion object {
-        private const val TAG = "AmneziaWG/QuickTileService"
+        private const val TAG = "RostamVPN/QuickTileService"
         var isAdded: Boolean = false
             private set
     }

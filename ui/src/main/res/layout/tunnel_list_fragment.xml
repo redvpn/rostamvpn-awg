@@ -40,7 +40,7 @@
             app:configurationHandler="@{rowConfigurationHandler}"
             app:items="@{tunnels}"
             app:layout="@{@layout/tunnel_list_item}"
-            tools:itemCount="2"
+            tools:itemCount="4"
             tools:listitem="@layout/tunnel_list_item" />
 
         <LinearLayout
@@ -59,7 +59,7 @@
                 android:layout_marginBottom="20dp"
                 android:alpha="1.0"
                 android:visibility="visible"
-                app:srcCompat="@drawable/rostam_logo_active" />
+                app:srcCompat="@drawable/rostam_logo_default" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -75,13 +75,19 @@
             android:id="@+id/create_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_margin="@android:dimen/app_icon_size"
             android:background="#FFC107"
             android:nextFocusUp="@id/tunnel_list"
             android:soundEffectsEnabled="false"
+            android:src="@android:drawable/ic_input_add"
+            android:text="@string/create_tunnel"
             app:backgroundTint="#FFC107"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:fabCustomSize="65dp"
+            app:fabSize="normal"
+            app:icon="@android:drawable/ic_input_add"
+            app:maxImageSize="55dp"
+            app:useCompatPadding="false" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

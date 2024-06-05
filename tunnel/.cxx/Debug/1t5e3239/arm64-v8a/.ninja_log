@@ -18,3 +18,7 @@
 4058	6312	1717371622383330672	CMakeFiles/libwg.so.dir/ndk-compat/compat.c.o	6a8be600bb8fd79d
 2898	6357	1717371621655292458	/Volumes/rostam-vpn-awg/tunnel/build/intermediates/cxx/Debug/1t5e3239/obj/arm64-v8a/libwg-quick.so	d9d77d5dc1ebcc0
 6357	6977	1717371625143475546	/Volumes/rostam-vpn-awg/tunnel/build/intermediates/cxx/Debug/1t5e3239/obj/arm64-v8a/libwg.so	cc8aeb18ed74a9f7
+275	5891	0	CMakeFiles/elf-cleaner	52eac3c2b66badd4
+275	5891	0	/Volumes/rostam-vpn-awg/tunnel/.cxx/Debug/1t5e3239/arm64-v8a/CMakeFiles/elf-cleaner	52eac3c2b66badd4
+5989	8137	1717554566907794746	/Volumes/rostam-vpn-awg/tunnel/build/intermediates/cxx/Debug/1t5e3239/obj/arm64-v8a/libwg-quick.so	d9d77d5dc1ebcc0
+6039	8441	1717554567215810916	/Volumes/rostam-vpn-awg/tunnel/build/intermediates/cxx/Debug/1t5e3239/obj/arm64-v8a/libwg.so	cc8aeb18ed74a9f7

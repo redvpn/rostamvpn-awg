@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBar
@@ -59,7 +58,11 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         actionBar = supportActionBar
-        //isTwoPaneLayout = findViewById<View?>(R.id.master_detail_wrapper) != null
+        supportActionBar?.setBackgroundDrawable(getDrawable(R.color.colorPrimary))
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setLogo(R.drawable.rostam_vpn)
+        // hide the action bar
+        //supportActionBar?.hide()
         supportFragmentManager.addOnBackStackChangedListener(this)
         backPressedCallback = onBackPressedDispatcher.addCallback(this) { handleBackPressed() }
         onBackStackChanged()

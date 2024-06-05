@@ -3,20 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_logo"
-        android:checkable="true"
-        android:enabled="true"
-        android:icon="@mipmap/rostam_vpn_drawer"
-        android:menuCategory="secondary"
-        android:visible="true"
-        app:showAsAction="always|collapseActionView" />
-
-    <item
         android:id="@+id/menu_settings"
         android:alphabeticShortcut="s"
         android:icon="@drawable/ic_settings"
+        android:iconTint="@color/brownish_orange"
+        android:iconTintMode="src_atop"
         android:menuCategory="container"
         android:orderInCategory="1000"
-        android:title="@string/settings"
+        android:title="@string/create_tunnel"
+        android:tooltipText="@string/create_tunnel"
         app:showAsAction="always" />
 </menu>

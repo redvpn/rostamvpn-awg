@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
-    kotlin("plugin.serialization") version "1.5.21" // Add the Kotlin serialization plugin
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.22"  // Add the Kotlin serialization plugin
 }
 
 android {
@@ -102,7 +102,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2") // Add this line
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-
 }
 
 tasks.withType<JavaCompile>().configureEach {

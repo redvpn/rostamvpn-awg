@@ -1,0 +1,55 @@
+{
+  "buildFiles": [
+    "/home/architect/rostam-vpn-awg/tunnel/tools/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/opt/android-sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/1i5721c5/armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/opt/android-sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/architect/rostam-vpn-awg/tunnel/.cxx/RelWithDebInfo/1i5721c5/armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "elf-cleaner::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "armeabi-v7a",
+      "artifactName": "elf-cleaner"
+    },
+    "libwg-go.so::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "armeabi-v7a",
+      "artifactName": "libwg-go.so"
+    },
+    "libwg-quick.so::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "armeabi-v7a",
+      "artifactName": "libwg-quick.so",
+      "output": "/home/architect/rostam-vpn-awg/tunnel/build/intermediates/cxx/RelWithDebInfo/1i5721c5/obj/armeabi-v7a/libwg-quick.so",
+      "runtimeFiles": []
+    },
+    "libwg.so::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "armeabi-v7a",
+      "artifactName": "libwg.so",
+      "output": "/home/architect/rostam-vpn-awg/tunnel/build/intermediates/cxx/RelWithDebInfo/1i5721c5/obj/armeabi-v7a/libwg.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/opt/android-sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/linux-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/opt/android-sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": []
+}

@@ -29,6 +29,6 @@ class BootShutdownReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        private const val TAG = "AmneziaWG/BootShutdownReceiver"
+        private const val TAG = "RostamVPN/BootShutdownReceiver"
     }
 }

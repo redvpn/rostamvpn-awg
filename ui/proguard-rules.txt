@@ -1,8 +1,11 @@
 -allowaccessmodification
 -dontusemixedcaseclassnames
--dontobfuscate
+#-dontobfuscate
 -verbose
-
+-optimizationpasses 3
+-overloadaggressively
+-repackageclasses ''
+-allowaccessmodification
 -keepattributes *Annotation*
 
 -keepclasseswithmembernames class * {

@@ -340,6 +340,6 @@ class TunnelListFragment : BaseFragment() {
 
     companion object {
         private const val CHECKED_ITEMS = "CHECKED_ITEMS"
-        private const val TAG = "AmneziaWG/TunnelListFragment"
+        private const val TAG = "RostamVPN/TunnelListFragment"
     }
 }

@@ -29,6 +29,7 @@ import java.nio.charset.StandardCharsets
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
+
 object TunnelImporter {
     suspend fun importTunnel(contentResolver: ContentResolver, uri: Uri, messageCallback: (CharSequence) -> Unit) = withContext(Dispatchers.IO) {
         val context = Application.get().applicationContext
@@ -123,6 +124,7 @@ object TunnelImporter {
             onTunnelImportFinished(emptyList(), listOf<Throwable>(e), messageCallback)
         }
     }
+
     fun importTunnelRostam(scope: CoroutineScope, parentFragmentManager: FragmentManager, tunnelName: String, configText: String, messageCallback: (CharSequence) -> Unit) {
         try {
             // Ensure the config text is parseable before proceeding…
@@ -131,7 +133,16 @@ object TunnelImporter {
             // Config text is valid, now create the tunnel…
             scope.launch {
                 try {
-                    Application.getTunnelManager().create(tunnelName, config)
+                    val tunnelManager = Application.getTunnelManager()
+                    val tunnels = tunnelManager.getTunnels()
+                    val existingTunnel = tunnels.find { it.name == tunnelName }
+
+                    if (existingTunnel != null) {
+                        tunnelManager.delete(existingTunnel)
+                    }
+
+                    // Now create the new tunnel
+                    tunnelManager.create(tunnelName, config)
                     messageCallback("Tunnel $tunnelName created successfully.")
                 } catch (e: Throwable) {
                     onTunnelImportFinished(emptyList(), listOf<Throwable>(e), messageCallback)
@@ -168,5 +179,5 @@ object TunnelImporter {
         messageCallback(message)
     }
 
-    private const val TAG = "AmneziaWG/TunnelImporter"
+    private const val TAG = "RostamVPN/TunnelImporter"
 }

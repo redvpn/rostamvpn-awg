@@ -328,6 +328,6 @@ class TunnelEditorFragment : BaseFragment(), MenuProvider {
     companion object {
         private const val KEY_LOCAL_CONFIG = "local_config"
         private const val KEY_ORIGINAL_NAME = "original_name"
-        private const val TAG = "AmneziaWG/TunnelEditorFragment"
+        private const val TAG = "RostamVPN/TunnelEditorFragment"
     }
 }

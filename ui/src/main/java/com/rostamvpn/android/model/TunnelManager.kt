@@ -250,6 +250,6 @@ class TunnelManager(private val configStore: ConfigStore) : BaseObservable() {
     }
 
     companion object {
-        private const val TAG = "AmneziaWG/TunnelManager"
+        private const val TAG = "RostamVPN/TunnelManager"
     }
 }

@@ -10,6 +10,7 @@ import androidx.databinding.CallbackRegistry
 import androidx.databinding.CallbackRegistry.NotifierCallback
 import androidx.lifecycle.lifecycleScope
 import com.rostamvpn.android.Application
+import com.rostamvpn.android.R
 import com.rostamvpn.android.model.ObservableTunnel
 import kotlinx.coroutines.launch
 
@@ -39,7 +40,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        supportActionBar?.setBackgroundDrawable(getDrawable(R.color.cameo_silk))
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setLogo(R.drawable.rostam_vpn_drawer)
+        supportActionBar?.show()
         // Restore the saved tunnel if there is one; otherwise grab it from the arguments.
         val savedTunnelName = when {
             savedInstanceState != null -> savedInstanceState.getString(KEY_SELECTED_TUNNEL)

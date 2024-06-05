@@ -237,4 +237,6 @@
     <string name="biometric_prompt_private_key_title">برای دیدن کلید خصوصی، هویت خود را تایید کنید</string>
     <string name="biometric_auth_error">شکست در تایید هویت</string>
     <string name="biometric_auth_error_reason">شکست در تایید هویت: %s</string>
+    <string name="create_from_hardcoded" type="id">پروفایل جدید</string>
+    <string name="tunnel_list_placeholder">دسترسی امن و سریع به اینترنت آزاد.</string>
 </resources>

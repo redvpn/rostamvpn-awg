@@ -109,6 +109,6 @@ abstract class BaseFragment : Fragment(), OnSelectedTunnelChangedListener {
     }
 
     companion object {
-        private const val TAG = "AmneziaWG/BaseFragment"
+        private const val TAG = "RostamVPN/BaseFragment"
     }
 }

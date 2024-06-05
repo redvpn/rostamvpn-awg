@@ -17,7 +17,7 @@
 
     <style name="RostamVPNTheme.MaterialCardView" parent="Widget.Material3.CardView.Elevated">
         <item name="cornerRadius">4dp</item>
-        <item name="contentPadding">8dp</item>
+        <item name="contentPadding">0dp</item>
     </style>
 
     <style name="SubpageActionBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

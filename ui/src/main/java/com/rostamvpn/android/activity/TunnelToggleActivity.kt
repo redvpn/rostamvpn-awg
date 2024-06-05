@@ -59,6 +59,6 @@ private fun toggleTunnelWithPermissionsResult() {
     }
 
     companion object {
-        const val TAG = "AmneziaWG/TunnelToggleActivity"
+        const val TAG = "RostamVPN/TunnelToggleActivity"
     }
 }

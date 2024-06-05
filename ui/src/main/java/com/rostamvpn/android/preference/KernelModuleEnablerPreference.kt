@@ -83,6 +83,6 @@ class KernelModuleEnablerPreference(context: Context, attrs: AttributeSet?) : Pr
     }
 
     companion object {
-        private const val TAG = "AmneziaWG/KernelModuleEnablerPreference"
+        private const val TAG = "RostamVPN/KernelModuleEnablerPreference"
     }
 }
