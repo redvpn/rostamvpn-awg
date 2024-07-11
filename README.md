@@ -7,7 +7,7 @@ This is an Android GUI for [AmneziaWG](https://amnezia.org/learn-more/31_amnezia
 ## Building
 
 ```
-$ git clone --recurse-submodules https://github.com/amnezia-vpn/amneziawg-android
+$ git clone --recurse-submodules https://github.com/redvpn/rostamvpn-awg.git
 $ cd amneziawg-android
 $ ./gradlew assembleRelease
 ```
