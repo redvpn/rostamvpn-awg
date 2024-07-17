@@ -50,6 +50,12 @@ class ObservableTunnel internal constructor(
     var state = state
         private set
 
+    var listener: ObservableTunnelListener? = null
+
+    fun setTunnelListener(listener: ObservableTunnelListener) {
+        this.listener = listener
+    }
+
     override fun onStateChange(newState: Tunnel.State) {
         onStateChanged(newState)
     }
@@ -58,6 +64,7 @@ class ObservableTunnel internal constructor(
         if (state != Tunnel.State.UP) onStatisticsChanged(null)
         this.state = state
         notifyPropertyChanged(BR.state)
+        listener?.stateChanged(state)
         return state
     }
 

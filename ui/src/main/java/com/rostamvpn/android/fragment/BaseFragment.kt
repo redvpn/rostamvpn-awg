@@ -6,11 +6,8 @@ package com.rostamvpn.android.fragment
 
 import android.content.Context
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
@@ -20,8 +17,6 @@ import com.rostamvpn.android.activity.BaseActivity
 import com.rostamvpn.android.activity.BaseActivity.OnSelectedTunnelChangedListener
 import com.rostamvpn.android.backend.GoBackend
 import com.rostamvpn.android.backend.Tunnel
-import com.rostamvpn.android.databinding.TunnelDetailFragmentBinding
-import com.rostamvpn.android.databinding.TunnelListItemBinding
 import com.rostamvpn.android.model.ObservableTunnel
 import com.rostamvpn.android.util.ErrorMessages
 import kotlinx.coroutines.launch
@@ -58,12 +53,7 @@ abstract class BaseFragment : Fragment(), OnSelectedTunnelChangedListener {
         super.onDetach()
     }
 
-    fun setTunnelState(view: View, checked: Boolean) {
-        val tunnel = when (val binding = DataBindingUtil.findBinding<ViewDataBinding>(view)) {
-            is TunnelDetailFragmentBinding -> binding.tunnel
-            is TunnelListItemBinding -> binding.item
-            else -> return
-        } ?: return
+    fun toggleTunnelState(tunnel: ObservableTunnel, checked: Boolean) {
         val activity = activity ?: return
         activity.lifecycleScope.launch {
             if (Application.getBackend() is GoBackend) {
@@ -77,9 +67,6 @@ abstract class BaseFragment : Fragment(), OnSelectedTunnelChangedListener {
                     }
                 } catch (e: Throwable) {
                     val message = activity.getString(R.string.error_prepare, ErrorMessages[e])
-                    Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                        .setAnchorView(view.findViewById(R.id.create_fab))
-                        .show()
                     Log.e(TAG, message, e)
                 }
             }

@@ -2,12 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
-
         <import type="com.rostamvpn.android.model.ObservableTunnel" />
         <import type="com.rostamvpn.android.backend.Tunnel.State" />
         <import type="com.rostamvpn.android.fragment.TunnelListFragment" />
+        <import type="com.rostamvpn.android.viewmodel.TunnelListFragmentViewModel" />
         <import type="android.view.View" />
         <variable
             name="fragment"
@@ -20,6 +19,11 @@
         <variable
             name="tunnels"
             type="com.rostamvpn.android.databinding.ObservableKeyedArrayList&lt;String, ObservableTunnel&gt;" />
+
+        <variable
+            name="viewModel"
+            type="com.rostamvpn.android.viewmodel.TunnelListFragmentViewModel" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -29,19 +33,12 @@
         android:background="@mipmap/globe_dot_pattern"
         android:clipChildren="false">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tunnel_list"
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:nextFocusDown="@id/create_fab"
-            android:nextFocusForward="@id/create_fab"
-            android:paddingBottom="@{@dimen/design_fab_size_normal * 1.1f}"
-            app:configurationHandler="@{rowConfigurationHandler}"
-            app:items="@{tunnels}"
-            app:layout="@{@layout/tunnel_list_item}"
-            tools:itemCount="4"
-            tools:listitem="@layout/tunnel_list_item" />
+            android:layout_height="wrap_content"
+            android:gravity="end">
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,15 +48,32 @@
             android:visibility="visible"
             tools:visibility="visible">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/logo_placeholder_active"
-                android:layout_width="240dp"
-                android:layout_height="240dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:alpha="1.0"
-                android:visibility="visible"
-                app:srcCompat="@drawable/rostam_logo_default" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/logo_placeholder_active"
+                    android:layout_width="240dp"
+                    android:layout_height="240dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    android:alpha="1.0"
+                    android:visibility="visible"
+                    android:layout_centerInParent="true"
+                    app:tunnelStatusImageId="@{viewModel.tunnelStatusImageId}" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar1"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true" />
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"

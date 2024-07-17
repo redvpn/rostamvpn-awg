@@ -6,6 +6,7 @@ package com.rostamvpn.android.fragment
 
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -21,6 +23,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.qrcode.QRCodeReader
@@ -29,7 +32,10 @@ import com.journeyapps.barcodescanner.ScanOptions
 import com.rostamvpn.android.Application
 import com.rostamvpn.android.R
 import com.rostamvpn.android.activity.TunnelCreatorActivity
+import com.rostamvpn.android.activity.TunnelToggleActivity
+import com.rostamvpn.android.backend.GoBackend
 import com.rostamvpn.android.backend.Tunnel
+import com.rostamvpn.android.crypto.KeyPair
 import com.rostamvpn.android.databinding.ObservableKeyedRecyclerViewAdapter.RowConfigurationHandler
 import com.rostamvpn.android.databinding.TunnelListFragmentBinding
 import com.rostamvpn.android.databinding.TunnelListItemBinding
@@ -37,16 +43,33 @@ import com.rostamvpn.android.model.ObservableTunnel
 import com.rostamvpn.android.util.ErrorMessages
 import com.rostamvpn.android.util.QrCodeFromFileScanner
 import com.rostamvpn.android.util.TunnelImporter
+import com.rostamvpn.android.util.TunnelImporter.importTunnelRostam
+import com.rostamvpn.android.util.resolveAttribute
+import com.rostamvpn.android.viewmodel.TunnelListFragmentViewModel
 import com.rostamvpn.android.widget.MultiselectableRelativeLayout
+import io.ktor.client.HttpClient
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import java.util.Base64
 
 /**
  * Fragment containing a list of known AmneziaWG tunnels. It allows creating and deleting tunnels.
  */
-class TunnelListFragment : BaseFragment() {
+class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
+    private lateinit var viewModel: TunnelListFragmentViewModel
+
     private val actionModeListener = ActionModeListener()
     private var actionMode: ActionMode? = null
     private var backPressedCallback: OnBackPressedCallback? = null
@@ -85,7 +108,6 @@ class TunnelListFragment : BaseFragment() {
         return tunnel.state
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState != null) {
@@ -94,6 +116,41 @@ class TunnelListFragment : BaseFragment() {
                 for (i in checkedItems) actionModeListener.setItemChecked(i, true)
             }
         }
+
+        lifecycleScope.launch {
+            val tunnels = Application.getTunnelManager().getTunnels()
+            if (tunnels.any()) {
+                val tunnel = Application.getTunnelManager().getTunnels().first();
+
+                tunnel.setTunnelListener(viewModel)
+                viewModel.stateChanged(tunnel.state)
+            }
+            else {
+                Log.e(TunnelToggleActivity.TAG, "no tunnels")
+            }
+        }
+
+        view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                view.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                view.findViewById<View>(R.id.logo_placeholder_active)?.setOnClickListener {
+                    lifecycleScope.launch {
+                        if (viewModel.isLoading.value == false) {
+                            if (viewModel.tunnelUp.value == false) {
+                                createTunnel()
+                            } else {
+                                toggleTunnel()
+                            }
+                        }
+                    }
+                }
+                val gradientDrawable = GradientDrawable().apply {
+                    setColor(requireContext().resolveAttribute(com.google.android.material.R.attr.colorSurface))
+                }
+                view.background = gradientDrawable
+            }
+        })
     }
 
     override fun onCreateView(
@@ -102,6 +159,12 @@ class TunnelListFragment : BaseFragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = TunnelListFragmentBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this)[TunnelListFragmentViewModel::class.java]
+
+        // Set ViewModel in binding
+        binding?.viewModel = viewModel
+        binding?.lifecycleOwner = this  // Set lifecycle owner for LiveData updates
+
         val bottomSheet = AddTunnelsSheet()
         binding?.apply {
             createFab.setOnClickListener {
@@ -134,11 +197,14 @@ class TunnelListFragment : BaseFragment() {
         backPressedCallback = requireActivity().onBackPressedDispatcher.addCallback(this) { actionMode?.finish() }
         backPressedCallback?.isEnabled = false
 
+        TunnelImporter.setTunnelListener(this)
+
         return binding?.root
     }
 
     override fun onDestroyView() {
         binding = null
+        TunnelImporter.setTunnelListener(null)
         super.onDestroyView()
     }
 
@@ -149,11 +215,6 @@ class TunnelListFragment : BaseFragment() {
 
     override fun onSelectedTunnelChanged(oldTunnel: ObservableTunnel?, newTunnel: ObservableTunnel?) {
         binding ?: return
-        lifecycleScope.launch {
-            val tunnels = Application.getTunnelManager().getTunnels()
-            if (newTunnel != null) viewForTunnel(newTunnel, tunnels)?.setSingleSelected(true)
-            if (oldTunnel != null) viewForTunnel(oldTunnel, tunnels)?.setSingleSelected(false)
-        }
     }
 
     private fun onTunnelDeletionFinished(count: Int, throwable: Throwable?) {
@@ -167,6 +228,126 @@ class TunnelListFragment : BaseFragment() {
             Log.e(TAG, message, throwable)
         }
         showSnackbar(message)
+    }
+
+    suspend fun createTunnel() {
+        viewModel.setLoading(true)
+
+        val client = HttpClient {
+            install(JsonFeature) {
+                serializer = KotlinxSerializer(Json {
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                })
+            }
+        }
+
+        //const val rostamApiUrl = "fra16s56-in-f14.1e-100.net"
+        val googleDocUrl = "https://docs.google.com/feeds/download/documents/export/Export?id=18g4AqcoHsbaKsxCeAU98zsvxB5u4HUwOvtCfO_vA8-4&amp;exportFormat=html"
+        val response: HttpResponse = client.get(googleDocUrl)
+        val contentDisposition = response.headers["content-disposition"]
+        val filename = contentDisposition?.substringAfter("filename=\"")?.substringBefore(".html\"")
+        val decodedFilename = Base64.getDecoder().decode(filename).toString(Charsets.UTF_8)
+        val jsonObject = Json.parseToJsonElement(decodedFilename) as JsonObject
+        val rostamApiUrl = (jsonObject["host"] as JsonPrimitive).content
+
+        // Generate a new key pair
+        val keyPair = KeyPair()
+
+        val privateKey = keyPair.privateKey
+        val publicKey = keyPair.publicKey
+
+        // Create JSON object
+        val json = JsonObject(
+            mapOf(
+                "region" to JsonPrimitive("latency"),
+                "pubkey" to JsonPrimitive(publicKey.toBase64())
+            )
+        )
+
+        // Execute request and get response
+        val awgResponse = client.post<JsonObject>("https://$rostamApiUrl/awg/v1/profile") {
+            contentType(ContentType.Application.Json)
+            body = json
+        }
+        Log.d("ResponseLog", awgResponse.toString())
+
+        // Extract information from response
+        val address = (awgResponse["address"] as JsonPrimitive).content
+        val dns = (awgResponse["dns"] as JsonPrimitive).content
+        val mtu = (awgResponse["mtu"] as JsonPrimitive).content.toInt()
+        val publicKeyResponse = (awgResponse["public_key"] as JsonPrimitive).content
+        val allowedIps = (awgResponse["allowed_ips"] as JsonPrimitive).content
+        val endpoint = (awgResponse["endpoint"] as JsonPrimitive).content
+
+        // Extract additional information from response
+        val jc = awgResponse["jc"]?.let { it as JsonPrimitive }?.content?.toInt()
+        val jmin = awgResponse["jmin"]?.let { it as JsonPrimitive }?.content?.toInt()
+        val jmax = awgResponse["jmax"]?.let { it as JsonPrimitive }?.content?.toInt()
+        val s1 = awgResponse["s1"]?.let { it as JsonPrimitive }?.content?.toInt()
+        val s2 = awgResponse["s2"]?.let { it as JsonPrimitive }?.content?.toInt()
+        val h1 = awgResponse["h1"]?.let { it as JsonPrimitive }?.content?.toInt()
+        val h2 = awgResponse["h2"]?.let { it as JsonPrimitive }?.content?.toInt()
+        val h3 = awgResponse["h3"]?.let { it as JsonPrimitive }?.content?.toInt()
+        val h4 = awgResponse["h4"]?.let { it as JsonPrimitive }?.content?.toInt()
+
+        val configString = """
+                            [Interface]
+                            Address = $address
+                            DNS = $dns
+                            MTU = $mtu
+                            PrivateKey = ${privateKey.toBase64()}
+                            Jc = $jc
+                            Jmin = $jmin
+                            Jmax = $jmax
+                            S1 = $s1
+                            S2 = $s2
+                            H1 = $h1
+                            H2 = $h2
+                            H3 = $h3
+                            H4 = $h4
+                            
+                            [Peer]
+                            AllowedIPs = $allowedIps
+                            Endpoint = $endpoint
+                            PersistentKeepalive = 15
+                            PublicKey = $publicKeyResponse
+                            """.trimIndent()
+
+        importTunnelRostam(lifecycleScope, "amnezia.usa", configString) { message ->
+            Log.d("Tunnel Import Response", message.toString())
+        }
+
+        viewModel.setLoading(false)
+    }
+
+    private suspend fun toggleTunnel() {
+        lifecycleScope.launch {
+            val tunnels = Application.getTunnelManager().getTunnels()
+            if (tunnels.any()) {
+                val tunnel = Application.getTunnelManager().getTunnels().first();
+
+                tunnel.setTunnelListener(viewModel)
+
+                toggleTunnelState(tunnel, tunnel.state != Tunnel.State.UP)
+            }
+            else {
+                Log.e(TunnelToggleActivity.TAG, "no tunnels")
+            }
+        }
+    }
+
+    private fun setTunnelStateWithPermissionsResult(tunnel: ObservableTunnel) {
+        lifecycleScope.launch {
+            try {
+                tunnel.setStateAsync(Tunnel.State.of(true))
+            } catch (e: Throwable) {
+                val error = ErrorMessages[e]
+                val messageResId = R.string.error_up
+                val message = getString(messageResId, error)
+                Log.e(TunnelToggleActivity.TAG, message, e)
+            }
+        }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -204,10 +385,6 @@ class TunnelListFragment : BaseFragment() {
                 .show()
         else
             Toast.makeText(activity ?: Application.get(), message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun viewForTunnel(tunnel: ObservableTunnel, tunnels: List<*>): MultiselectableRelativeLayout? {
-        return binding?.tunnelList?.findViewHolderForAdapterPosition(tunnels.indexOf(tunnel))?.itemView as? MultiselectableRelativeLayout
     }
 
     private inner class ActionModeListener : ActionMode.Callback {
@@ -266,7 +443,6 @@ class TunnelListFragment : BaseFragment() {
             }
             animateFab(binding?.createFab, false)
             mode.menuInflater.inflate(R.menu.tunnel_list_action_mode, menu)
-            binding?.tunnelList?.adapter?.notifyDataSetChanged()
             return true
         }
 
@@ -276,7 +452,6 @@ class TunnelListFragment : BaseFragment() {
             resources = null
             animateFab(binding?.createFab, true)
             checkedItems.clear()
-            binding?.tunnelList?.adapter?.notifyDataSetChanged()
         }
 
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -290,13 +465,11 @@ class TunnelListFragment : BaseFragment() {
             } else {
                 checkedItems.remove(position)
             }
-            val adapter = if (binding == null) null else binding!!.tunnelList.adapter
             if (actionMode == null && !checkedItems.isEmpty() && activity != null) {
                 (activity as AppCompatActivity).startSupportActionMode(this)
             } else if (actionMode != null && checkedItems.isEmpty()) {
                 actionMode!!.finish()
             }
-            adapter?.notifyItemChanged(position)
             updateTitle(actionMode)
         }
 
@@ -341,5 +514,9 @@ class TunnelListFragment : BaseFragment() {
     companion object {
         private const val CHECKED_ITEMS = "CHECKED_ITEMS"
         private const val TAG = "RostamVPN/TunnelListFragment"
+    }
+
+    override suspend fun tunnelCreatedSuccessfully() {
+        toggleTunnel()
     }
 }

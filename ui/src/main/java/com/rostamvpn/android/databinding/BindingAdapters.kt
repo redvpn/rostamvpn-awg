@@ -10,12 +10,14 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableList
 import androidx.databinding.ViewDataBinding
 import androidx.databinding.adapters.ListenerUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rostamvpn.android.BR
@@ -190,5 +192,13 @@ object BindingAdapters {
     @BindingAdapter("isDeleting")
     fun setIsDeleting(card: TvCardView, deleting: Boolean) {
         card.isDeleting = deleting
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:tunnelStatusImageId")
+    fun setImageResource(imageView: AppCompatImageView, resIdLiveData: MutableLiveData<Int>?) {
+        resIdLiveData?.value?.let {
+            imageView.setImageResource(it)
+        }
     }
 }

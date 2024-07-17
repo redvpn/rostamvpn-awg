@@ -66,8 +66,7 @@
                         android:nextFocusForward="@id/interface_name_text"
                         app:checked="@{tunnel.state == State.UP}"
                         app:layout_constraintBaseline_toBottomOf="@+id/interface_title"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:onBeforeCheckedChanged="@{fragment::setTunnelState}" />
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                     <TextView
                         android:id="@+id/interface_name_label"

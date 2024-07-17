@@ -31,6 +31,16 @@ import java.util.zip.ZipInputStream
 
 
 object TunnelImporter {
+    interface TunnelListener {
+        suspend fun tunnelCreatedSuccessfully()
+    }
+
+    private var tunnelListener: TunnelListener? = null
+
+    fun setTunnelListener(listener: TunnelListener?) {
+        tunnelListener = listener
+    }
+
     suspend fun importTunnel(contentResolver: ContentResolver, uri: Uri, messageCallback: (CharSequence) -> Unit) = withContext(Dispatchers.IO) {
         val context = Application.get().applicationContext
         val futureTunnels = ArrayList<Deferred<ObservableTunnel>>()
@@ -125,7 +135,7 @@ object TunnelImporter {
         }
     }
 
-    fun importTunnelRostam(scope: CoroutineScope, parentFragmentManager: FragmentManager, tunnelName: String, configText: String, messageCallback: (CharSequence) -> Unit) {
+    fun importTunnelRostam(scope: CoroutineScope, tunnelName: String, configText: String, messageCallback: (CharSequence) -> Unit) {
         try {
             // Ensure the config text is parseable before proceeding…
             val config = Config.parse(ByteArrayInputStream(configText.toByteArray(StandardCharsets.UTF_8)))
@@ -144,6 +154,7 @@ object TunnelImporter {
                     // Now create the new tunnel
                     tunnelManager.create(tunnelName, config)
                     messageCallback("Tunnel $tunnelName created successfully.")
+                    tunnelListener?.tunnelCreatedSuccessfully()
                 } catch (e: Throwable) {
                     onTunnelImportFinished(emptyList(), listOf<Throwable>(e), messageCallback)
                 }
