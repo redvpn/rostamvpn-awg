@@ -5,7 +5,6 @@
 package com.rostamvpn.android
 
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
@@ -38,6 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.lang.ref.WeakReference
 import java.util.Locale
+import java.util.logging.Logger
 
 class Application : android.app.Application() {
     private val futureBackend = CompletableDeferred<Backend>()
@@ -50,14 +50,6 @@ class Application : android.app.Application() {
 
     override fun attachBaseContext(context: Context) {
         super.attachBaseContext(context)
-        if (BuildConfig.MIN_SDK_VERSION > Build.VERSION.SDK_INT) {
-            val intent = Intent(Intent.ACTION_MAIN)
-            intent.addCategory(Intent.CATEGORY_HOME)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            System.exit(0)
-        }
     }
 
     private suspend fun determineBackend(): Backend {
@@ -90,7 +82,8 @@ class Application : android.app.Application() {
         preferencesDataStore = PreferenceDataStoreFactory.create { applicationContext.preferencesDataStoreFile("settings") }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             runBlocking {
-                AppCompatDelegate.setDefaultNightMode(if (UserKnobs.darkTheme.first()) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO)
+                val theme = if (UserKnobs.darkTheme.first()) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                AppCompatDelegate.setDefaultNightMode(theme)
             }
             UserKnobs.darkTheme.onEach {
                 val newMode = if (it) {
@@ -103,8 +96,9 @@ class Application : android.app.Application() {
                 }
             }.launchIn(coroutineScope)
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
+
         tunnelManager = TunnelManager(FileConfigStore(applicationContext))
         tunnelManager.onCreate()
         coroutineScope.launch(Dispatchers.IO) {

@@ -60,6 +60,7 @@
     <color name="md_theme_dark_surfaceTint">#ADC7FF</color>
     <color name="md_theme_dark_outlineVariant">#44474F</color>
     <color name="md_theme_dark_scrim">#000000</color>
+    <color name="statusBar">#CABA9C</color>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#343434</color>
     <color name="black">#343434</color>

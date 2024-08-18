@@ -4,13 +4,18 @@
  */
 package com.rostamvpn.android.activity
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
-import android.view.Menu
+import android.os.IBinder
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
-import androidx.appcompat.app.ActionBar
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
@@ -18,6 +23,8 @@ import com.rostamvpn.android.R
 import com.rostamvpn.android.fragment.TunnelDetailFragment
 import com.rostamvpn.android.fragment.TunnelEditorFragment
 import com.rostamvpn.android.model.ObservableTunnel
+import com.rostamvpn.android.services.ConfigService
+
 
 /**
  * CRUD interface for AmneziaWG tunnels. This activity serves as the main entry point to the
@@ -25,9 +32,31 @@ import com.rostamvpn.android.model.ObservableTunnel
  * editing the configuration and interface state of AmneziaWG tunnels.
  */
 class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener {
-    private var actionBar: ActionBar? = null
     private var isTwoPaneLayout = false
     private var backPressedCallback: OnBackPressedCallback? = null
+
+    private var configService: ConfigService? = null
+    private var isBound = false
+
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as ConfigService.LocalBinder
+            configService = binder.getService()
+            isBound = true
+
+            val firstRun = configService?.getFirstRun()
+
+            if (firstRun == true) {
+                setContentView(R.layout.main_activity)
+            } else {
+                setContentView(R.layout.main_activity)
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isBound = false
+        }
+    }
 
     private fun handleBackPressed() {
         val backStackEntries = supportFragmentManager.backStackEntryCount
@@ -40,7 +69,6 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
         if (backStackEntries >= 1)
             supportFragmentManager.popBackStack()
 
-        // Deselect the current tunnel on navigating back from the detail pane to the one-pane list.
         if (backStackEntries == 1)
             selectedTunnel = null
     }
@@ -48,29 +76,31 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
     override fun onBackStackChanged() {
         val backStackEntries = supportFragmentManager.backStackEntryCount
         backPressedCallback?.isEnabled = backStackEntries >= 1
-        if (actionBar == null) return
-        // Do not show the home menu when the two-pane layout is at the detail view (see above).
-        val minBackStackEntries = if (isTwoPaneLayout) 2 else 1
-        actionBar!!.setDisplayHomeAsUpEnabled(backStackEntries >= minBackStackEntries)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
-        actionBar = supportActionBar
-        supportActionBar?.setBackgroundDrawable(getDrawable(R.color.colorPrimary))
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setLogo(R.drawable.rostam_vpn)
-        // hide the action bar
-        //supportActionBar?.hide()
+
+        val serviceIntent = Intent(this, ConfigService::class.java)
+        bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE)
+
+        supportActionBar?.hide()
         supportFragmentManager.addOnBackStackChangedListener(this)
         backPressedCallback = onBackPressedDispatcher.addCallback(this) { handleBackPressed() }
+
+        val window = window
+        window.statusBarColor = ContextCompat.getColor(this, R.color.statusBar)
         onBackStackChanged()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main_activity, menu)
-        return true
+    override fun onDestroy() {
+        super.onDestroy()
+
+        if (isBound) {
+            unbindService(connection)
+            isBound = false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -4,10 +4,14 @@
  */
 package com.rostamvpn.android.fragment
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.res.Resources
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -15,33 +19,23 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.snackbar.Snackbar
-import com.google.zxing.qrcode.QRCodeReader
-import com.journeyapps.barcodescanner.ScanContract
-import com.journeyapps.barcodescanner.ScanOptions
 import com.rostamvpn.android.Application
 import com.rostamvpn.android.R
-import com.rostamvpn.android.activity.TunnelCreatorActivity
 import com.rostamvpn.android.activity.TunnelToggleActivity
-import com.rostamvpn.android.backend.GoBackend
 import com.rostamvpn.android.backend.Tunnel
 import com.rostamvpn.android.crypto.KeyPair
 import com.rostamvpn.android.databinding.ObservableKeyedRecyclerViewAdapter.RowConfigurationHandler
 import com.rostamvpn.android.databinding.TunnelListFragmentBinding
 import com.rostamvpn.android.databinding.TunnelListItemBinding
 import com.rostamvpn.android.model.ObservableTunnel
-import com.rostamvpn.android.util.ErrorMessages
-import com.rostamvpn.android.util.QrCodeFromFileScanner
+import com.rostamvpn.android.services.ConfigService
 import com.rostamvpn.android.util.TunnelImporter
 import com.rostamvpn.android.util.TunnelImporter.importTunnelRostam
 import com.rostamvpn.android.util.resolveAttribute
@@ -55,9 +49,6 @@ import io.ktor.client.request.post
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -74,38 +65,36 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
     private var actionMode: ActionMode? = null
     private var backPressedCallback: OnBackPressedCallback? = null
     private var binding: TunnelListFragmentBinding? = null
-    private val tunnelFileImportResultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { data ->
-        if (data == null) return@registerForActivityResult
-        val activity = activity ?: return@registerForActivityResult
-        val contentResolver = activity.contentResolver ?: return@registerForActivityResult
-        activity.lifecycleScope.launch {
-            if (QrCodeFromFileScanner.validContentType(contentResolver, data)) {
-                try {
-                    val qrCodeFromFileScanner = QrCodeFromFileScanner(contentResolver, QRCodeReader())
-                    val result = qrCodeFromFileScanner.scan(data)
-                    TunnelImporter.importTunnel(parentFragmentManager, result.text) { showSnackbar(it) }
-                } catch (e: Exception) {
-                    val error = ErrorMessages[e]
-                    val message = Application.get().resources.getString(R.string.import_error, error)
-                    Log.e(TAG, message, e)
-                    showSnackbar(message)
-                }
-            } else {
-                TunnelImporter.importTunnel(contentResolver, data) { showSnackbar(it) }
-            }
+
+    private var configService: ConfigService? = null
+    private var isBound = false
+
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as ConfigService.LocalBinder
+            configService = binder.getService()
+            isBound = true
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isBound = false
         }
     }
 
-    private val qrImportResultLauncher = registerForActivityResult(ScanContract()) { result ->
-        val qrCode = result.contents
-        val activity = activity
-        if (qrCode != null && activity != null) {
-            activity.lifecycleScope.launch { TunnelImporter.importTunnel(parentFragmentManager, qrCode) { showSnackbar(it) } }
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val serviceIntent = Intent(context, ConfigService::class.java)
+        context?.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE)
     }
 
-    public fun getTunnelState(tunnel: ObservableTunnel): Tunnel.State {
-        return tunnel.state
+    override fun onDestroy() {
+        super.onDestroy()
+
+        if (isBound) {
+            context?.unbindService(connection)
+            isBound = false
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -120,7 +109,7 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
         lifecycleScope.launch {
             val tunnels = Application.getTunnelManager().getTunnels()
             if (tunnels.any()) {
-                val tunnel = Application.getTunnelManager().getTunnels().first();
+                val tunnel = Application.getTunnelManager().getTunnels().first()
 
                 tunnel.setTunnelListener(viewModel)
                 viewModel.stateChanged(tunnel.state)
@@ -137,7 +126,7 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
                 view.findViewById<View>(R.id.logo_placeholder_active)?.setOnClickListener {
                     lifecycleScope.launch {
                         if (viewModel.isLoading.value == false) {
-                            if (viewModel.tunnelUp.value == false) {
+                            if (isBound && viewModel.tunnelUp.value == false) {
                                 createTunnel()
                             } else {
                                 toggleTunnel()
@@ -164,36 +153,7 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
         // Set ViewModel in binding
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = this  // Set lifecycle owner for LiveData updates
-
-        val bottomSheet = AddTunnelsSheet()
-        binding?.apply {
-            createFab.setOnClickListener {
-                if (childFragmentManager.findFragmentByTag("BOTTOM_SHEET") != null)
-                    return@setOnClickListener
-                childFragmentManager.setFragmentResultListener(AddTunnelsSheet.REQUEST_KEY_NEW_TUNNEL, viewLifecycleOwner) { _, bundle ->
-                    when (bundle.getString(AddTunnelsSheet.REQUEST_METHOD)) {
-                        AddTunnelsSheet.REQUEST_CREATE -> {
-                            startActivity(Intent(requireActivity(), TunnelCreatorActivity::class.java))
-                        }
-
-                        AddTunnelsSheet.REQUEST_IMPORT -> {
-                            tunnelFileImportResultLauncher.launch("*/*")
-                        }
-
-                        AddTunnelsSheet.REQUEST_SCAN -> {
-                            qrImportResultLauncher.launch(
-                                ScanOptions()
-                                    .setOrientationLocked(false)
-                                    .setBeepEnabled(false)
-                                    .setPrompt(getString(R.string.qr_code_hint))
-                            )
-                        }
-                    }
-                }
-                bottomSheet.showNow(childFragmentManager, "BOTTOM_SHEET")
-            }
-            executePendingBindings()
-        }
+        binding?.drawerButton?.setOnClickListener { binding?.mainDrawer?.openDrawer(GravityCompat.END) }
         backPressedCallback = requireActivity().onBackPressedDispatcher.addCallback(this) { actionMode?.finish() }
         backPressedCallback?.isEnabled = false
 
@@ -217,81 +177,91 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
         binding ?: return
     }
 
-    private fun onTunnelDeletionFinished(count: Int, throwable: Throwable?) {
-        val message: String
-        val ctx = activity ?: Application.get()
-        if (throwable == null) {
-            message = ctx.resources.getQuantityString(R.plurals.delete_success, count, count)
-        } else {
-            val error = ErrorMessages[throwable]
-            message = ctx.resources.getQuantityString(R.plurals.delete_error, count, count, error)
-            Log.e(TAG, message, throwable)
-        }
-        showSnackbar(message)
-    }
-
     suspend fun createTunnel() {
         viewModel.setLoading(true)
 
-        val client = HttpClient {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer(Json {
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                })
+        try {
+            val existingConfigString = configService?.hasValidConfig()
+
+            if (existingConfigString == true) {
+                configService?.getConfigString()?.let {
+                    importTunnelRostam(lifecycleScope, "amnezia.usa", it) { message ->
+                        Log.d("Tunnel Import Response", message.toString())
+                    }
+
+                    viewModel.setLoading(false)
+                    return
+                }
+            }
+        } catch (err: Exception) {
+            err.message?.let {
+                Log.e(tag, it)
             }
         }
 
-        //const val rostamApiUrl = "fra16s56-in-f14.1e-100.net"
-        val googleDocUrl = "https://docs.google.com/feeds/download/documents/export/Export?id=18g4AqcoHsbaKsxCeAU98zsvxB5u4HUwOvtCfO_vA8-4&amp;exportFormat=html"
-        val response: HttpResponse = client.get(googleDocUrl)
-        val contentDisposition = response.headers["content-disposition"]
-        val filename = contentDisposition?.substringAfter("filename=\"")?.substringBefore(".html\"")
-        val decodedFilename = Base64.getDecoder().decode(filename).toString(Charsets.UTF_8)
-        val jsonObject = Json.parseToJsonElement(decodedFilename) as JsonObject
-        val rostamApiUrl = (jsonObject["host"] as JsonPrimitive).content
+        var configString: String? = null
+        try {
+            val client = HttpClient {
+                install(JsonFeature) {
+                    serializer = KotlinxSerializer(Json {
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    })
+                }
+            }
 
-        // Generate a new key pair
-        val keyPair = KeyPair()
+            //const val rostamApiUrl = "fra16s56-in-f14.1e-100.net"
+            val googleDocUrl =
+                "https://docs.google.com/feeds/download/documents/export/Export?id=18g4AqcoHsbaKsxCeAU98zsvxB5u4HUwOvtCfO_vA8-4&amp;exportFormat=html"
+            val response: HttpResponse = client.get(googleDocUrl)
+            val contentDisposition = response.headers["content-disposition"]
+            val filename =
+                contentDisposition?.substringAfter("filename=\"")?.substringBefore(".html\"")
+            val decodedFilename = Base64.getDecoder().decode(filename).toString(Charsets.UTF_8)
+            val jsonObject = Json.parseToJsonElement(decodedFilename) as JsonObject
+            val rostamApiUrl = (jsonObject["host"] as JsonPrimitive).content
 
-        val privateKey = keyPair.privateKey
-        val publicKey = keyPair.publicKey
+            // Generate a new key pair
+            val keyPair = KeyPair()
 
-        // Create JSON object
-        val json = JsonObject(
-            mapOf(
-                "region" to JsonPrimitive("latency"),
-                "pubkey" to JsonPrimitive(publicKey.toBase64())
+            val privateKey = keyPair.privateKey
+            val publicKey = keyPair.publicKey
+
+            // Create JSON object
+            val json = JsonObject(
+                mapOf(
+                    "region" to JsonPrimitive("latency"),
+                    "pubkey" to JsonPrimitive(publicKey.toBase64())
+                )
             )
-        )
 
-        // Execute request and get response
-        val awgResponse = client.post<JsonObject>("https://$rostamApiUrl/awg/v1/profile") {
-            contentType(ContentType.Application.Json)
-            body = json
-        }
-        Log.d("ResponseLog", awgResponse.toString())
+            // Execute request and get response
+            val awgResponse = client.post<JsonObject>("https://$rostamApiUrl/awg/v1/profile") {
+                contentType(ContentType.Application.Json)
+                body = json
+            }
+            Log.d("ResponseLog", awgResponse.toString())
 
-        // Extract information from response
-        val address = (awgResponse["address"] as JsonPrimitive).content
-        val dns = (awgResponse["dns"] as JsonPrimitive).content
-        val mtu = (awgResponse["mtu"] as JsonPrimitive).content.toInt()
-        val publicKeyResponse = (awgResponse["public_key"] as JsonPrimitive).content
-        val allowedIps = (awgResponse["allowed_ips"] as JsonPrimitive).content
-        val endpoint = (awgResponse["endpoint"] as JsonPrimitive).content
+            // Extract information from response
+            val address = (awgResponse["address"] as JsonPrimitive).content
+            val dns = (awgResponse["dns"] as JsonPrimitive).content
+            val mtu = (awgResponse["mtu"] as JsonPrimitive).content.toInt()
+            val publicKeyResponse = (awgResponse["public_key"] as JsonPrimitive).content
+            val allowedIps = (awgResponse["allowed_ips"] as JsonPrimitive).content
+            val endpoint = (awgResponse["endpoint"] as JsonPrimitive).content
 
-        // Extract additional information from response
-        val jc = awgResponse["jc"]?.let { it as JsonPrimitive }?.content?.toInt()
-        val jmin = awgResponse["jmin"]?.let { it as JsonPrimitive }?.content?.toInt()
-        val jmax = awgResponse["jmax"]?.let { it as JsonPrimitive }?.content?.toInt()
-        val s1 = awgResponse["s1"]?.let { it as JsonPrimitive }?.content?.toInt()
-        val s2 = awgResponse["s2"]?.let { it as JsonPrimitive }?.content?.toInt()
-        val h1 = awgResponse["h1"]?.let { it as JsonPrimitive }?.content?.toInt()
-        val h2 = awgResponse["h2"]?.let { it as JsonPrimitive }?.content?.toInt()
-        val h3 = awgResponse["h3"]?.let { it as JsonPrimitive }?.content?.toInt()
-        val h4 = awgResponse["h4"]?.let { it as JsonPrimitive }?.content?.toInt()
+            // Extract additional information from response
+            val jc = awgResponse["jc"]?.let { it as JsonPrimitive }?.content?.toInt()
+            val jmin = awgResponse["jmin"]?.let { it as JsonPrimitive }?.content?.toInt()
+            val jmax = awgResponse["jmax"]?.let { it as JsonPrimitive }?.content?.toInt()
+            val s1 = awgResponse["s1"]?.let { it as JsonPrimitive }?.content?.toInt()
+            val s2 = awgResponse["s2"]?.let { it as JsonPrimitive }?.content?.toInt()
+            val h1 = awgResponse["h1"]?.let { it as JsonPrimitive }?.content?.toInt()
+            val h2 = awgResponse["h2"]?.let { it as JsonPrimitive }?.content?.toInt()
+            val h3 = awgResponse["h3"]?.let { it as JsonPrimitive }?.content?.toInt()
+            val h4 = awgResponse["h4"]?.let { it as JsonPrimitive }?.content?.toInt()
 
-        val configString = """
+            configString = """
                             [Interface]
                             Address = $address
                             DNS = $dns
@@ -313,9 +283,24 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
                             PersistentKeepalive = 15
                             PublicKey = $publicKeyResponse
                             """.trimIndent()
+        } catch (err: Exception) {
+            err.message?.let {
+                Log.e(tag, it)
+            }
+        }
 
-        importTunnelRostam(lifecycleScope, "amnezia.usa", configString) { message ->
-            Log.d("Tunnel Import Response", message.toString())
+        if (configString != null) {
+            configService?.setNewConfig(configString)
+        } else if (configService?.hasNonNullConfig() == true) {
+            configString = configService?.getConfigString()
+        }
+
+        if (configString == null)  {
+            Log.e(tag, "Valid Configuration Not Found.")
+        } else {
+            importTunnelRostam(lifecycleScope, "amnezia.usa", configString) { message ->
+                Log.d("Tunnel Import Response", message.toString())
+            }
         }
 
         viewModel.setLoading(false)
@@ -325,7 +310,7 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
         lifecycleScope.launch {
             val tunnels = Application.getTunnelManager().getTunnels()
             if (tunnels.any()) {
-                val tunnel = Application.getTunnelManager().getTunnels().first();
+                val tunnel = Application.getTunnelManager().getTunnels().first()
 
                 tunnel.setTunnelListener(viewModel)
 
@@ -333,19 +318,6 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
             }
             else {
                 Log.e(TunnelToggleActivity.TAG, "no tunnels")
-            }
-        }
-    }
-
-    private fun setTunnelStateWithPermissionsResult(tunnel: ObservableTunnel) {
-        lifecycleScope.launch {
-            try {
-                tunnel.setStateAsync(Tunnel.State.of(true))
-            } catch (e: Throwable) {
-                val error = ErrorMessages[e]
-                val messageResId = R.string.error_up
-                val message = getString(messageResId, error)
-                Log.e(TunnelToggleActivity.TAG, message, e)
             }
         }
     }
@@ -377,16 +349,6 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
         }
     }
 
-    private fun showSnackbar(message: CharSequence) {
-        val binding = binding
-        if (binding != null)
-            Snackbar.make(binding.mainContainer, message, Snackbar.LENGTH_LONG)
-                .setAnchorView(binding.createFab)
-                .show()
-        else
-            Toast.makeText(activity ?: Application.get(), message, Toast.LENGTH_SHORT).show()
-    }
-
     private inner class ActionModeListener : ActionMode.Callback {
         val checkedItems: MutableCollection<Int> = HashSet()
         private var resources: Resources? = null
@@ -400,20 +362,12 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
                 R.id.menu_action_delete -> {
                     val activity = activity ?: return true
                     val copyCheckedItems = HashSet(checkedItems)
-                    binding?.createFab?.apply {
-                        visibility = View.VISIBLE
-                        scaleX = 1f
-                        scaleY = 1f
-                    }
                     activity.lifecycleScope.launch {
                         try {
                             val tunnels = Application.getTunnelManager().getTunnels()
                             val tunnelsToDelete = ArrayList<ObservableTunnel>()
                             for (position in copyCheckedItems) tunnelsToDelete.add(tunnels[position])
-                            val futures = tunnelsToDelete.map { async(SupervisorJob()) { it.deleteAsync() } }
-                            onTunnelDeletionFinished(futures.awaitAll().size, null)
-                        } catch (e: Throwable) {
-                            onTunnelDeletionFinished(0, e)
+                        } catch (_: Throwable) {
                         }
                     }
                     checkedItems.clear()
@@ -441,7 +395,6 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
             if (activity != null) {
                 resources = activity!!.resources
             }
-            animateFab(binding?.createFab, false)
             mode.menuInflater.inflate(R.menu.tunnel_list_action_mode, menu)
             return true
         }
@@ -450,7 +403,6 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
             actionMode = null
             backPressedCallback?.isEnabled = false
             resources = null
-            animateFab(binding?.createFab, true)
             checkedItems.clear()
         }
 
@@ -488,32 +440,10 @@ class TunnelListFragment : BaseFragment(), TunnelImporter.TunnelListener {
                 mode.title = resources!!.getQuantityString(R.plurals.delete_title, count, count)
             }
         }
-
-        private fun animateFab(view: View?, show: Boolean) {
-            view ?: return
-            val animation = AnimationUtils.loadAnimation(
-                context, if (show) R.anim.scale_up else R.anim.scale_down
-            )
-            animation.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationRepeat(animation: Animation?) {
-                }
-
-                override fun onAnimationEnd(animation: Animation?) {
-                    if (!show) view.visibility = View.GONE
-                }
-
-                override fun onAnimationStart(animation: Animation?) {
-                    if (show) view.visibility = View.VISIBLE
-                }
-            })
-            view.startAnimation(animation)
-        }
-
     }
 
     companion object {
         private const val CHECKED_ITEMS = "CHECKED_ITEMS"
-        private const val TAG = "RostamVPN/TunnelListFragment"
     }
 
     override suspend fun tunnelCreatedSuccessfully() {

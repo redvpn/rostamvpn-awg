@@ -22,6 +22,7 @@ android {
     defaultConfig {
         applicationId = pkg
         targetSdk = 34
+        vectorDrawables.useSupportLibrary = true
         versionCode = providers.gradleProperty("amneziawgVersionCode").get().toInt()
         versionName = providers.gradleProperty("amneziawgVersionName").get()
         buildConfigField("int", "MIN_SDK_VERSION", minSdk.toString())
@@ -95,13 +96,13 @@ dependencies {
     implementation(libs.zxing.android.embedded)
     implementation(libs.kotlinx.coroutines.android)
     coreLibraryDesugaring(libs.desugarJdkLibs)
-    implementation("io.ktor:ktor-client-core:1.6.7")
-    implementation("io.ktor:ktor-client-json:1.6.7")
-    implementation("io.ktor:ktor-client-serialization:1.6.7")
-    implementation("io.ktor:ktor-client-android:1.6.7")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2") // Add this line
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.json)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.android)
+    implementation(libs.kotlinx.serialization.json) // Add this line
+    implementation(libs.androidx.lifecycle.runtime.ktx.v231)
+    implementation(libs.kotlinx.coroutines.core)
 }
 
 tasks.withType<JavaCompile>().configureEach {

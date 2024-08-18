@@ -6,11 +6,9 @@ package com.rostamvpn.android.fragment
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.snackbar.Snackbar
 import com.rostamvpn.android.Application
 import com.rostamvpn.android.R
 import com.rostamvpn.android.activity.BaseActivity
@@ -83,13 +81,6 @@ abstract class BaseFragment : Fragment(), OnSelectedTunnelChangedListener {
                 val error = ErrorMessages[e]
                 val messageResId = if (checked) R.string.error_up else R.string.error_down
                 val message = activity.getString(messageResId, error)
-                val view = view
-                if (view != null)
-                    Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                        .setAnchorView(view.findViewById(R.id.create_fab))
-                        .show()
-                else
-                    Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
                 Log.e(TAG, message, e)
             }
         }
